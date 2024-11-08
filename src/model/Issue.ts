@@ -1,6 +1,7 @@
 import mongoose,{Schema,Document}  from 'mongoose';
 
 export interface Issue extends Document{
+    _id:string,
     title:string,
     description:string,
     status:string,
@@ -8,6 +9,10 @@ export interface Issue extends Document{
 }
 
 const IssueSchema:Schema<Issue>=new Schema({
+    _id:{
+        type:String,
+        required:true
+    },
     title:{
         type:String,
         required:true
