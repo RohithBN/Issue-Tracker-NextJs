@@ -1,3 +1,22 @@
+An Issue Tracker is a web application that allows users to report, manage, and track issues (bugs, tasks, feature requests, etc.) for a project or product. This project aims to provide a simple, yet effective solution for managing issues, with functionalities like submitting issues, updating their status, and viewing a list of issues.
+
+This project uses the following technologies:
+
+Frontend: React, TypeScript, TailwindCSS
+Backend: Node.js (Express), Axios for API requests
+Database: MongoDB (or you can specify if you're using a different DB)
+
+Features
+
+Submit Issues: Users can submit issues with a title, description, and status.
+View Issues: A list of issues is displayed with essential information like title, description, status, and creation date.
+Responsive: Works seamlessly across various screen sizes from mobile devices to desktops.
+Error Handling: Proper error messages for when something goes wrong, like failed requests.
+
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
