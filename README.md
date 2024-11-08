@@ -3,11 +3,12 @@ An Issue Tracker is a web application that allows users to report, manage, and t
 This project uses the following technologies:
 
 Frontend: React, TypeScript, TailwindCSS
+
 Backend: Node.js (Express), Axios for API requests
+
 Database: MongoDB (or you can specify if you're using a different DB)
 
-Features
-
+Features:
 Submit Issues: Users can submit issues with a title, description, and status.
 View Issues: A list of issues is displayed with essential information like title, description, status, and creation date.
 Responsive: Works seamlessly across various screen sizes from mobile devices to desktops.
