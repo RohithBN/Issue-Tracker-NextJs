@@ -5,7 +5,8 @@ export interface Issue extends Document{
     title:string,
     description:string,
     status:string,
-    createdAt:Date
+    createdAt:Date,
+    closedBy:string
 }
 
 const IssueSchema:Schema<Issue>=new Schema({
@@ -28,6 +29,10 @@ const IssueSchema:Schema<Issue>=new Schema({
     createdAt:{
         type:Date,
         default:Date.now
+    },
+    closedBy:{
+        type:String,
+        default:null
     }
 })
 

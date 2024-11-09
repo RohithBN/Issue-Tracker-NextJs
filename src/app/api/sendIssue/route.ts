@@ -30,6 +30,7 @@ export async function POST(request: Request) {
             description: description,
             status: "OPEN",
             createdAt: Date.now(),
+            closedBy:null
         });
 
         // Validate issue object before saving

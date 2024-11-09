@@ -5,14 +5,16 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FaSyncAlt } from 'react-icons/fa' // Refresh icon from react-icons
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from '@/components/ui/skeleton'
 
 
 interface Issue {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   status: string;
   createdAt: Date;
+  closedBy:string
 }
 
 const Page = () => {
@@ -53,6 +55,10 @@ const Page = () => {
     }
   }, [refreshing]) // Only re-fetch when refreshing state changes
 
+  const handleIssueClosing=(id:string)=>{
+
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
       <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8">
@@ -72,7 +78,12 @@ const Page = () => {
 
         {/* Loading/No Issues/Error Messages */}
         {isFetching && (
-          <p className="text-center text-gray-500">Loading...</p>
+          <div className="grid grid-cols-3 gap-4">
+          <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+          <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+          <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+        </div>
+        
         )}
 
         {error && (
@@ -87,7 +98,7 @@ const Page = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {issues.length > 0 ? (
             issues.map((issue) => (
-              <IssueCard key={issue.id} issue={issue} />
+              <IssueCard key={issue._id} issue={issue}  />
             ))
           ) : (
             <p className="text-center text-gray-500">No issues to display.</p>
