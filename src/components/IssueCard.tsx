@@ -16,6 +16,7 @@ interface IssueCardProps {
     status: string;
     createdAt: Date;
     closedBy:string
+    assignedTo:string
   };
 }
 
@@ -64,28 +65,33 @@ const IssueCard = ({ issue }: IssueCardProps) => {
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle>{issue.title}</CardTitle>
-          <Badge
-            className={`${
-              issue.status === "OPEN"
-                ? "bg-green-700 text-black hover:bg-green-600"
-                : "bg-red-600 text-black hover:bg-red-500"
-            }`}
-            onClick={!issueDisabled ? () => onIssueClosing(issue._id) : undefined}
-            style={{ cursor: issue.status=="CLOSED"? 'not-allowed' : 'pointer' }}
-          >
-            {issue.status}
-          </Badge>
+         <Badge
+  className={`${
+    issue.status === "OPEN"
+      ? "bg-green-700 text-black hover:bg-green-600"
+      : "bg-red-600 text-black hover:bg-red-500"
+  }`}
+  onClick={!issueDisabled && issue.status === "OPEN" && session?.user.username === issue.assignedTo ? () => onIssueClosing(issue._id) : undefined}
+  style={{
+    cursor: issue.status === "CLOSED" || session?.user.username !== issue.assignedTo ? 'not-allowed' : 'pointer'
+  }}
+>
+  {issue.status}
+</Badge>
+
         </div>
         <div className="text-sm">
           {dayjs(issue.createdAt).format('MMM D, YYYY h:mm A')}
+          
         </div>
       </CardHeader>
       <CardContent>
         <p>{issue.description}</p>
       </CardContent>
       <CardFooter>
-        {issue.closedBy && 
-        <p>Issue closed by: {user.username}</p>
+        {issue.closedBy ?
+        <p>Issue closed by: {user.username}</p>:
+        <p>Issue Assigned to: {issue.assignedTo}</p>
         }     
       </CardFooter>
     </Card>

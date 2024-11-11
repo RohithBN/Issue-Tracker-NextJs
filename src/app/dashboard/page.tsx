@@ -15,6 +15,7 @@ interface Issue {
   status: string;
   createdAt: Date;
   closedBy:string
+  assignedTo:string
 }
 
 const Page = () => {
@@ -95,7 +96,7 @@ const Page = () => {
         )}
 
         {/* Render Issues */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
           {issues.length > 0 ? (
             issues.map((issue) => (
               <IssueCard key={issue._id} issue={issue}  />

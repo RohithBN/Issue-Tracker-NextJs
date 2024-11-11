@@ -12,12 +12,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import axios, { AxiosError } from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
+import { User } from "next-auth"
 
 // Schema for form validation
 const issueformSchema = z.object({
@@ -27,12 +37,43 @@ const issueformSchema = z.object({
   description: z.string().min(5, {
     message: "Description must be at least 5 characters long",
   }),
+  assignIssue: z.string()
 })
 
+type Username={
+  _id:string,
+  username: string
+}
+
 export default function Page() {
+  const [users, setUsers] = useState<Username[]>([]) // Using the `Username` type
   const { toast } = useToast()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    if (session?.user) {
+      const getUsers = async () => {
+        try {
+          setIsFetching(true)
+          const response = await axios.get("/api/getUsers")
+          // Filter out the current user's username after fetching
+          const filteredUsers = response.data.usernames.filter(
+            (user:any) => user.username !== session?.user.username
+          )
+          console.log(filteredUsers)
+          setUsers(filteredUsers)
+        } catch (error) {
+          console.error("Failed to fetch users:", error)
+        } finally {
+          setIsFetching(false)
+        }
+      }
+      getUsers()
+    }
+  }, [session]) // Re-fetch when session changes
 
   async function onSubmit(values: z.infer<typeof issueformSchema>) {
     setIsSubmitting(true)
@@ -61,6 +102,7 @@ export default function Page() {
     defaultValues: {
       title: "",
       description: "",
+      assignIssue: ""
     },
   })
 
@@ -91,6 +133,37 @@ export default function Page() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Enter issue details here" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assignIssue"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assign Issue to:</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      value={field.value}
+                    >
+                      <SelectTrigger className="w-[250px]">
+                        <SelectValue placeholder="Select a user" />
+                      </SelectTrigger>
+                      <SelectContent>
+  <SelectGroup>
+    {users.map((user) => (
+      <SelectItem key={user._id} value={user.username}>  {/* Access the 'username' property here */}
+        {user.username}  {/* Render the 'username' */}
+      </SelectItem>
+    ))}
+  </SelectGroup>
+</SelectContent>
+
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -5,7 +5,7 @@ import { authOptions } from './app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth';
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/sign-in', '/sign-up', '/', '/verify/:path*'],
+  matcher: ['/dashboard/:path*', '/sign-in', '/sign-up', '/', '/verify/:path*','/issue-form'],
 };
 
 export async function middleware(request: NextRequest) {
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  if (!token && url.pathname.startsWith('/dashboard')) {
+  if (!token && url.pathname.startsWith('/dashboard') || !token && url.pathname.startsWith('/issue-form')) {
     return NextResponse.redirect(new URL('/sign-in', request.url));
   }
 

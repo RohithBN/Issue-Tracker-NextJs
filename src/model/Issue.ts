@@ -7,9 +7,10 @@ export interface Issue extends Document{
     status:string,
     createdAt:Date,
     closedBy:string
+    assignedTo:string
 }
 
-const IssueSchema:Schema<Issue>=new Schema({
+export const IssueSchema:Schema<Issue>=new Schema({
     _id:{
         type:String,
         required:true
@@ -31,6 +32,10 @@ const IssueSchema:Schema<Issue>=new Schema({
         default:Date.now
     },
     closedBy:{
+        type:String,
+        default:null
+    },
+    assignedTo:{
         type:String,
         default:null
     }
