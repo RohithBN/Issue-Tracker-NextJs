@@ -90,7 +90,7 @@ const IssueCard = ({ issue }: IssueCardProps) => {
       </CardContent>
       <CardFooter>
         {issue.closedBy ?
-        <p>Issue closed by: {user.username}</p>:
+        <p>Issue closed by: {issue.closedBy}</p>:
         <p>Issue Assigned to: {issue.assignedTo}</p>
         }     
       </CardFooter>
