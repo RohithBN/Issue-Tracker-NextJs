@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
     const { filter } = await request.json();
+    console.log('filter:',filter)
 
     try {
         let filteredIssue;
@@ -11,7 +12,15 @@ export async function POST(request: NextRequest) {
             filteredIssue = await IssueModel.find({ status: filter });
         } else if (filter === 'OLDEST') {
             filteredIssue = await IssueModel.find().sort({ createdAt: 1 }); // Oldest first
-        } else {
+        } else if (filter == 'LAST SEVEN DAYS') {
+            const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                filteredIssue = await IssueModel.find({
+                    createdAt: { '$gt': sevenDaysAgo }
+                    }).sort({ createdAt: -1 });
+
+        }
+        
+        else {
             filteredIssue = await IssueModel.find().sort({ createdAt: -1 }); // Default to newest first
         }
 
@@ -31,7 +40,7 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error:any) {
-        console.error(error);
+        console.error(error.message);
         return NextResponse.json({
             success: false,
             message: "Error retrieving issues",

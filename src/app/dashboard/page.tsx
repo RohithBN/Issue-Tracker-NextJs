@@ -47,6 +47,9 @@ const Page = () => {
       const data={filter:filter}
       const response=await axios.post("/api/filter",data)
       setIssues(response.data.filteredIssue)
+      toast({
+        title:response.data.message
+      })
       }
       }
       handleFIlter();
@@ -116,13 +119,27 @@ const Page = () => {
         {/* Header Section */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800">Issues</h1>
-          <button
-            onClick={() => setIsRefreshing(true)}
-            disabled={isFetching}
-            className="flex items-center justify-center p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md transition-colors duration-200"
-          >
-            <FaSyncAlt className="text-xl" />
-          </button>
+          <div className="flex items-center space-x-4">
+
+  <div className="flex items-center border rounded-md shadow-sm px-3 py-1.5 w-full max-w-[240px] bg-white">
+    <input
+      type="text"
+      placeholder="Search issues"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="flex-grow focus:outline-none"
+    />
+    <BsSearch className="text-gray-500 cursor-pointer" />
+  </div>
+  <button
+    onClick={() => setIsRefreshing(true)}
+    disabled={isFetching}
+    className="flex items-center justify-center p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md transition-colors duration-200"
+  >
+    <FaSyncAlt className="text-xl" />
+  </button>
+</div>
+
         </div>
         <Separator />
 
@@ -158,28 +175,20 @@ const Page = () => {
         <SelectItem value="OPEN">OPEN</SelectItem>
         <SelectItem value="CLOSED">CLOSED</SelectItem>
         <SelectItem value="OLDEST">OLDEST</SelectItem>
-        <SelectItem value="NEWEST">NEWEST</SelectItem>
+        <SelectItem value="NEWEST">NEWEST</SelectItem> 
+       <SelectItem value="LAST SEVEN DAYS">LAST 7 DAYS</SelectItem>
       </SelectGroup>
     </SelectContent>
   </Select>
 
   {/* Search Bar */}
-  <div className="flex items-center border rounded-md shadow-sm px-3 py-1.5 w-full max-w-[240px] bg-white">
-    <input
-      type="text"
-      placeholder="Search issues"
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="flex-grow focus:outline-none"
-    />
-    <BsSearch  className="text-gray-500 cursor-pointer" />
-  </div>
+  
 </div>
 
             
 
         {/* Render Issues */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 ">
           {issues.length > 0 ? (
             issues.map((issue) => (
               <IssueCard key={issue._id} issue={issue}  />

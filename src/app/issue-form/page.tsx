@@ -64,6 +64,11 @@ export default function Page() {
             (user:any) => user.username !== session?.user.username
           )
           console.log(filteredUsers)
+          if(filteredUsers.length===1){
+            setUsers([
+              {_id:'0',
+              username:"NONE"}])
+          }
           setUsers(filteredUsers)
         } catch (error) {
           console.error("Failed to fetch users:", error)
@@ -147,6 +152,7 @@ export default function Page() {
                   <FormLabel>Assign Issue to:</FormLabel>
                   <FormControl>
                     <Select
+                    
                       onValueChange={(value) => field.onChange(value)}
                       value={field.value}
                     >
